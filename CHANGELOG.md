@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.2.0
+
+First published release. `0.1.0` was completed but never reached npm, so the feature list below ships for the first time; the entries after "Since 0.1.0" are what changed in this iteration.
+
+### Since 0.1.0
+
+- **Listed in the DSH plugin catalog.** The bundle is now an entry in the community catalog (`RyeSama/dsh-plugin-guard/plugins/dsh-guard-tool`, category `dev`), installable straight from GitHub with `dsh plugin --profile web add github:RyeSama/dsh-plugin-guard#path:plugins/dsh-guard-tool`. Once the npm package exists the catalog resolves the same entry to npm automatically — no second submission.
+- **Fixed the host compatibility declaration.** The bundle was developed and tested against the `0.2.1-alpha` line of the platform packages, but declared `@deepseek-ai/dsh-tools@0.0.1-rc.1` and `dsh.engines.dsh >=0.1.5-rc.1`, which overstated compatibility. It now pins `>=0.2.0-rc.1 <0.3.0-0` in both `peerDependencies` and `dsh.engines.dsh`, so a host outside that range fails an explicit peer check instead of silently loading a tool it cannot call.
+- **Publishable bundle package.** `plugins/dsh-guard-tool` gained `publishConfig.access: public`, a `./package.json` export (bundlers and catalogs read it), and its own copy of the MIT `LICENSE`; npm packing no longer falls back to the repository root license.
+- `docs/dsh-bundle.md` documents the peer-dependency convention the ecosystem actually uses (`@deepseek-ai/dsh-tools` as a peer, the host reading it from its own bundle) and repeats that DSH installers do not enforce `engines.dsh`.
+- The plugin smoke suite runs in CI against the real `defineTool` from `@deepseek-ai/dsh-tools@0.2.1-alpha.2` instead of a stub.
+
 ## 0.1.0
 
 First release.

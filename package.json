@@ -1,6 +1,6 @@
 {
   "name": "dsh-plugin-guard-cli",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Security governance and admission layer for DSH (DeepSeek Harness) plugins: one-command scan, dsh.permissions manifest spec, trust index, runtime audit adapter.",
   "keywords": [
     "dsh",
