@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Plugin Guard",
+    "description": "Scan a plugin package for install risk before it joins your profile. Read-only: it never imports or runs the code it scans."
+  }
+}

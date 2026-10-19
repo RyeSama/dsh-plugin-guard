@@ -1,0 +1,54 @@
+{
+  "name": "dsh-plugin-guard-tool",
+  "version": "0.1.0",
+  "description": "Plugin Guard for DeepSeek Harness: an agent tool that scans a plugin package for install risk before it joins your profile.",
+  "type": "module",
+  "exports": {
+    ".": "./index.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "index.js",
+    "spec.js",
+    "cordis.patch.yml",
+    "icon.svg",
+    "locale/*.json",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "dsh": {
+    "manifestVersion": 1,
+    "engines": {
+      "dsh": ">=0.1.5-rc.1"
+    },
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "dependencies": {
+    "dsh-plugin-guard-cli": "0.1.0"
+  },
+  "devDependencies": {
+    "@deepseek-ai/dsh-tools": "0.0.1-rc.1"
+  },
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "plugin",
+    "security",
+    "scanner",
+    "admission"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RyeSama/dsh-plugin-guard",
+    "directory": "plugins/dsh-guard-tool"
+  },
+  "scripts": {
+    "test": "node --test test/smoke.mjs"
+  }
+}

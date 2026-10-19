@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Plugin Guard（插件安检）",
+    "description": "在插件进入你的 profile 之前先扫一遍安装风险。只读：不会 import、安装或运行被扫描的代码。"
+  }
+}

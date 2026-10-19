@@ -1,0 +1,6 @@
+# Mounts the Plugin Guard tool into the Host half of this profile.
+# There is no Web half on purpose: this bundle registers one agent tool and
+# ships no client code, so nothing is injected into the desktop UI.
+- insert:
+    - id: dsh-plugin-guard-tool
+      name: dsh-plugin-guard-tool
