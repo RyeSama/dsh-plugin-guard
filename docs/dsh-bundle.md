@@ -83,6 +83,9 @@ boundary". Installed bundles never go through it.
 The community market lists catalog entries, not npm uploads. An entry becomes
 installable when the package is published to npm, its `latest` version is stable
 and its manifest declares `dsh.bundle.patch` — those are the market's rules, not
-ours. When the package is not published yet, the entry stays browse-only.
+ours. When the package is not published yet, the entry stays browse-only. This
+entry (`RyeSama/dsh-plugin-guard/plugins/dsh-guard-tool`) is published as
+`dsh-plugin-guard-tool` on npm, so it installs from the registry; the catalog
+offers the GitHub path as a fallback.
 
 A listing is not a security review, and this project does not treat it as one.

@@ -24,7 +24,7 @@ the code it looks at, and it never writes to the package.
 dsh plugin --profile desktop add dsh-plugin-guard-tool
 ```
 
-Or from a checkout, without publishing:
+Or from a checkout, without going through npm:
 
 ```bash
 dsh plugin --profile desktop add link:$PWD/plugins/dsh-guard-tool
