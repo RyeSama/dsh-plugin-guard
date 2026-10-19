@@ -7,6 +7,8 @@ A clean plugin prints `PASS 100/100 — 0 high · 0 medium · 0 low`; anything r
 
 **A security gate you can run before you install a DSH plugin, before you publish one, and in CI.**
 
+[![CI](https://github.com/RyeSama/dsh-plugin-guard/actions/workflows/ci.yml/badge.svg)](https://github.com/RyeSama/dsh-plugin-guard/actions/workflows/ci.yml) [![npm](https://img.shields.io/npm/v/dsh-plugin-guard-cli.svg)](https://www.npmjs.com/package/dsh-plugin-guard-cli) [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 DSH plugins are npm packages that declare a `dsh` block and get composed into the DSH host process. There is no sandbox at that boundary: a plugin runs with the same privileges as DSH itself. This tool does not change that. It makes the decision *visible before it happens*:
 
 - **scanner** — reads the package (never runs it) and reports what it would be allowed to do
