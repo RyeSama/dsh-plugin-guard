@@ -64,7 +64,8 @@ jobs:
         working-directory: ${{ runner.temp }}
         run: |
           set -euo pipefail
-          time npx --yes "$TGZ" scan "${{ github.workspace }}/tests/fixtures/clean-plugin" | tee scan.txt
+          # `npx <tarball>` only works on npm 11+; the --package form works on every npm.
+          time npx --yes --package "$TGZ" -- dsh-plugin-guard scan "${{ github.workspace }}/tests/fixtures/clean-plugin" | tee scan.txt
           grep -q "PASS" scan.txt
           test "${PIPESTATUS[0]}" -eq 0
 
@@ -72,7 +73,7 @@ jobs:
         working-directory: ${{ runner.temp }}
         run: |
           set +e
-          npx --yes "$TGZ" scan "${{ github.workspace }}/tests/fixtures/postinstall" > risky.txt 2>&1
+          npx --yes --package "$TGZ" -- dsh-plugin-guard scan "${{ github.workspace }}/tests/fixtures/postinstall" > risky.txt 2>&1
           code=$?
           cat risky.txt
           test "$code" -eq 1
@@ -82,5 +83,5 @@ jobs:
         working-directory: ${{ runner.temp }}
         run: |
           set +e
-          npx --yes "$TGZ" doctor
+          npx --yes --package "$TGZ" -- dsh-plugin-guard doctor
           test $? -eq 0
