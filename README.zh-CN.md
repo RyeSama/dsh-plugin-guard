@@ -41,6 +41,7 @@ npx dsh-plugin-guard-cli doctor
 npx dsh-plugin-guard-cli init ./my-plugin --dry-run
 npx dsh-plugin-guard-cli index add ./my-plugin
 npx dsh-plugin-guard-cli index list
+npx dsh-plugin-guard-cli index verify ./my-plugin   # 复核后代码有没有被改过
 npx dsh-plugin-guard-cli audit status
 ```
 

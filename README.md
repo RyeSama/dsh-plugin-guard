@@ -50,6 +50,7 @@ npx dsh-plugin-guard-cli init ./my-plugin
 # trust index
 npx dsh-plugin-guard-cli index add ./my-plugin
 npx dsh-plugin-guard-cli index list
+npx dsh-plugin-guard-cli index verify ./my-plugin        # did this artefact change since review?
 npx dsh-plugin-guard-cli index remove dsh-my-plugin@1.0.0
 
 # audit sidecar

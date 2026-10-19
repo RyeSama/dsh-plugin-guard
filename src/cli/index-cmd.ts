@@ -1,9 +1,9 @@
 import { analyze } from '../scanner/analyze.js'
 import { resolveTarget } from '../scanner/resolve.js'
-import { entryFromReport, listEntries, loadIndex, recordEntry, removeEntry, saveIndex, indexFilePath } from '../index-store/index.js'
+import { entryFromReport, listEntries, loadIndex, lookupEntry, recordEntry, removeEntry, saveIndex, indexFilePath } from '../index-store/index.js'
 import { readTextFile, joinInside } from '../util/fsx.js'
 import { color } from './colors.js'
-import type { ScanOptions } from '../scanner/types.js'
+import type { IndexEntry, ScanOptions } from '../scanner/types.js'
 import { VERSION } from '../version.js'
 
 function offlineOptions(): ScanOptions {
@@ -122,24 +122,95 @@ export async function runIndexPath(flags: { json?: boolean }): Promise<number> {
   return 0
 }
 
-export async function runIndexVerify(flags: { json?: boolean }): Promise<number> {
+function isCompleteEntry(entry: unknown): entry is NonNullable<IndexEntry> {
+  if (typeof entry !== 'object' || entry === null) return false
+  const record = entry as Record<string, unknown>
+  return (
+    typeof record['name'] === 'string' &&
+    typeof record['version'] === 'string' &&
+    typeof record['treeSha256'] === 'string' &&
+    record['treeSha256'].length === 64 &&
+    typeof record['verdict'] === 'string' &&
+    typeof record['scannedAt'] === 'string'
+  )
+}
+
+/**
+ * Without an argument: drop entries that are structurally broken (an interrupted
+ * write, a hand-edited file) and report what survived.
+ * With a target: scan it again and compare the current artefact with what was
+ * recorded, so a silent republish is visible immediately.
+ */
+export async function runIndexVerify(target: string | undefined, flags: { json?: boolean }): Promise<number> {
   const index = await loadIndex()
-  const specs = Object.keys(index.entries)
-  const missing: string[] = []
-  for (const spec of specs) {
-    const entry = index.entries[spec]
-    if (!entry) missing.push(spec)
+
+  if (!target) {
+    const removed: string[] = []
+    for (const [spec, entry] of Object.entries(index.entries)) {
+      if (!isCompleteEntry(entry)) {
+        delete index.entries[spec]
+        removed.push(spec)
+      }
+    }
+    if (removed.length > 0) await saveIndex(index)
+    const entries = Object.keys(index.entries).length
+    if (flags.json) {
+      process.stdout.write(JSON.stringify({ ok: true, entries, removed }, null, 2) + '\n')
+    } else {
+      process.stdout.write(`Trust index is valid: ${entries} ${entries === 1 ? 'entry' : 'entries'}.\n`)
+      if (removed.length > 0) process.stdout.write(`Removed ${removed.length} corrupt ${removed.length === 1 ? 'entry' : 'entries'}: ${removed.join(', ')}\n`)
+    }
+    return 0
   }
-  if (missing.length > 0) {
-    delete process.env['DSH_GUARD_INDEX']
-    for (const spec of missing) delete index.entries[spec]
-    await saveIndex(index)
+
+  const resolved = await resolveTarget(target, offlineOptions())
+  try {
+    const identity = resolved.npmMeta
+      ? { name: resolved.npmMeta.name, version: resolved.npmMeta.version }
+      : await identityOf(resolved.root)
+    const report = await analyze({
+      root: resolved.root,
+      target: {
+        kind: resolved.kind,
+        input: resolved.input,
+        name: identity.name,
+        version: identity.version,
+        root: resolved.kind === 'directory' ? resolved.root : null,
+        fromRegistry: resolved.kind === 'npm',
+      },
+      npmMeta: resolved.npmMeta,
+      indexEntry: null,
+      options: offlineOptions(),
+    })
+
+    const spec = identity.name && identity.version ? `${identity.name}@${identity.version}` : null
+    const entry = spec ? await lookupEntry(identity.name as string, identity.version as string) : null
+    const current = { treeSha256: report.source.treeSha256 ?? '', publisher: report.npm.publisher }
+
+    const result = {
+      spec,
+      recorded: entry ? { treeSha256: entry.treeSha256, publisher: entry.publisher ?? null } : null,
+      current,
+      status: !entry ? 'not-recorded' : entry.treeSha256 === current.treeSha256 ? 'match' : 'changed',
+    }
+
+    if (flags.json) {
+      process.stdout.write(JSON.stringify(result, null, 2) + '\n')
+    } else if (!entry) {
+      process.stdout.write(`${spec ?? target} is not recorded in the trust index.\n`)
+      process.stdout.write(`Next: dsh-plugin-guard index add ${target}\n`)
+    } else if (result.status === 'match') {
+      process.stdout.write(`${spec} matches the recorded artefact (tree ${current.treeSha256.slice(0, 12)}).\n`)
+    } else {
+      process.stdout.write(`${color.red('CHANGED')} ${spec}\n`)
+      process.stdout.write(`  recorded ${entry.treeSha256.slice(0, 12)}\n`)
+      process.stdout.write(`  current  ${current.treeSha256.slice(0, 12)}\n`)
+      process.stdout.write('The code you reviewed is not the code on disk. Re-scan it before installing.\n')
+    }
+
+    if (!entry) return 3
+    return result.status === 'match' ? 0 : 1
+  } finally {
+    await resolved.cleanup?.()
   }
-  if (flags.json) {
-    process.stdout.write(JSON.stringify({ ok: true, entries: Object.keys(index.entries).length, removed: missing }, null, 2) + '\n')
-  } else {
-    process.stdout.write(`Trust index is valid: ${Object.keys(index.entries).length} entries.\n`)
-    if (missing.length > 0) process.stdout.write(`Removed ${missing.length} corrupt entries.\n`)
-  }
-  return 0
 }

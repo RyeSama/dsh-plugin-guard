@@ -120,10 +120,11 @@ function buildProgram(): Command {
     })
   index
     .command('verify')
-    .description('check the trust index for corrupt entries')
+    .argument('[target]', 're-scan this package and compare it with the recorded hash')
+    .description('check the index, or compare one package with what was recorded')
     .option('--json', 'print machine-readable JSON')
-    .action(async (flags: Record<string, unknown>) => {
-      process.exitCode = await runIndexVerify({ json: Boolean(flags['json']) })
+    .action(async (target: string | undefined, flags: Record<string, unknown>) => {
+      process.exitCode = await runIndexVerify(target, { json: Boolean(flags['json']) })
     })
 
   const audit = program.command('audit').description('inspect the runtime audit sidecar')
