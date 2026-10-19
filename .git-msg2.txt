@@ -1,5 +1,0 @@
-docs(ci): document the bundle and test its host half in CI
-
-Also upgrades vitest to 5.0.5: the previous range carried two critical
-advisories that only affected the test runner, but a security project should
-not ship a lockfile that says "2 critical" when the fix is a version bump.

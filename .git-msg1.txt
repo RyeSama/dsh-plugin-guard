@@ -1,8 +1,0 @@
-feat(dsh): add a DSH plugin bundle that registers the plugin_guard tool
-
-The bundle is a separate package because DSH resolves a bundle through its own
-manifest: a package that pretends to be both a CLI and a bundle makes the
-admission story harder to state. Host-only, one tool, no client code.
-
-spec.js stays free of DSH imports so the tool's behaviour is testable with
-node --test and no DSH installation present.
