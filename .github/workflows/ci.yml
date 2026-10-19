@@ -40,6 +40,9 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Test the DSH bundle host half
+        run: npm run plugins:test
+
       - name: Smoke test the packed tarball
         run: npm run smoke
 

@@ -80,6 +80,25 @@ DSH 目前没有公开的插件审计事件流，也没有进程内隔离。因�
 
 详见 [docs/audit-adapter.md](docs/audit-adapter.md) 与 [docs/threat-model.md](docs/threat-model.md)。
 
+## 在 DSH 里使用
+
+同一个扫描器也打包成了 DSH 插件 bundle，agent 可以在安装前自己先查一遍：
+
+```bash
+dsh plugin --profile desktop add dsh-plugin-guard-tool
+```
+
+它注册一个工具 `plugin_guard`：传目录或 npm 包名，返回判定、原因和下一条命令——和命令行同一份输出，只是不用切终端。
+
+```
+> 装之前先扫一下 dsh-plugin-gate
+
+FAIL  0/100  ·  1 高危 · 1 中危 · 2 低危
+HIGH  security/dangerous-api  Evaluates code at runtime (lib/rules.js:136)
+```
+
+这个 bundle 没有客户端代码，所以桌面 UI 里不会多出任何面板。它是独立的 npm 包（[plugins/dsh-guard-tool](plugins/dsh-guard-tool)），因为 DSH 是按 manifest 解析 bundle 的：一个包要么是 bundle、要么是 CLI，两边都沾会让"准入"这件事说不清楚。
+
 ## 非目标
 
 - 不是沙箱：DSH 加载插件后，它无法阻止恶意代码。

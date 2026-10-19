@@ -56,20 +56,22 @@
   "scripts": {
     "build": "tsup",
     "typecheck": "tsc --noEmit",
-    "lint": "oxlint --deny-warnings src tests scripts",
+    "lint": "oxlint --deny-warnings src tests scripts plugins/dsh-guard-tool",
     "test": "vitest run",
     "test:watch": "vitest",
     "smoke": "node scripts/smoke.mjs",
-    "verify": "npm run lint && npm run typecheck && npm run test && npm run build",
-    "prepublishOnly": "npm run verify"
+    "verify": "npm run lint && npm run typecheck && npm run test && npm run build && npm run plugins:test",
+    "prepublishOnly": "npm run verify",
+    "plugins:test": "node plugins/dsh-guard-tool/scripts/dev-link.mjs && node --test plugins/dsh-guard-tool/test/smoke.mjs"
   },
   "devDependencies": {
+    "@deepseek-ai/dsh-tools": "^0.0.1-rc.1",
     "@types/node": "^22.10.0",
     "commander": "^15.0.0",
     "oxlint": "^1.0.0",
     "tsup": "^8.5.0",
     "typescript": "^5.9.0",
-    "vitest": "^3.2.0",
+    "vitest": "^5.0.5",
     "zod": "^3.25.0"
   }
 }

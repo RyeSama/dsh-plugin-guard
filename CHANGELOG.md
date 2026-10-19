@@ -6,6 +6,8 @@ First release.
 
 ### Added
 
+- `dsh-plugin-guard-tool` — a DSH plugin bundle that registers the `plugin_guard` agent tool, so a scan can happen inside the Harness before a package is installed. Host-only: no client code, no UI, no extra privileges; it calls the same `analyze()` the CLI calls. See `docs/dsh-bundle.md`.
+- `docs/dsh-bundle.md` — what the bundle registers, install commands, and what it may not claim.
 - `dsh-plugin-guard scan <path|npm-package>` — static security scan for DSH plugins. Directory input is offline by default; npm input downloads the tarball, verifies its registry integrity hash, and never runs install scripts.
 - 15 built-in rules across manifest, publish state, permissions, dangerous APIs, dependency hygiene, and source integrity. `--only` / `--ignore` select rules; `--fail-on-medium` makes medium findings fail CI.
 - `dsh.permissions` manifest specification (version 1) with a strict validator, overbroad-grant detection, and code-vs-declaration mismatch detection. Documented in `docs/permissions-spec.md`.

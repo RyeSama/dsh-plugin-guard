@@ -126,6 +126,28 @@ DSH has no public plugin audit stream and no in-process isolation. This project 
 
 It never claims to intercept, block or observe plugin code it cannot see. See [docs/audit-adapter.md](docs/audit-adapter.md) and [docs/threat-model.md](docs/threat-model.md).
 
+## Inside DSH
+
+The same scanner ships as a DSH plugin bundle, so the agent can check a package before it installs one:
+
+```bash
+dsh plugin --profile desktop add dsh-plugin-guard-tool
+```
+
+It registers one tool, `plugin_guard`. You pass a directory or an npm package name; it answers with the verdict, the reasons and the next command — the same output as the CLI, without a terminal.
+
+```
+> scan dsh-plugin-gate before I install it
+
+FAIL  0/100  ·  1 high · 1 medium · 2 low
+HIGH  security/dangerous-api  Evaluates code at runtime (lib/rules.js:136)
+```
+
+The bundle has no client code, so nothing is added to the desktop UI. It is a
+separate npm package ([plugins/dsh-guard-tool](plugins/dsh-guard-tool)) because
+DSH resolves a bundle through its own manifest: a package either is a bundle or
+is a CLI, and pretending to be both would make the admission path unclear.
+
 ## Non-goals
 
 - Not a sandbox: it cannot stop a malicious plugin from doing anything once DSH loads it.
