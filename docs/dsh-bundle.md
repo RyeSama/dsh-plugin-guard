@@ -46,6 +46,22 @@ The install is performed by the plugin manager, not by copying files into
 `node_modules` — DSH merges bundles into the profile's layer stack, and a copied
 folder is not part of that stack.
 
+## Compatibility
+
+The bundle is a plain Cordis plugin: it imports `defineTool` from
+`@deepseek-ai/dsh-tools` and registers through `ctx.tools.register`. Platform
+packages like that one are supplied by the host, so they are declared as a
+`peerDependency` rather than a bundled dependency — the same convention the
+other published DSH bundles use:
+
+```json
+"peerDependencies": { "@deepseek-ai/dsh-tools": ">=0.2.0-rc.1 <0.3.0-0" }
+```
+
+`dsh.engines.dsh` declares the same range so a reader can see what was tested.
+DSH's installers do not enforce either field today; a mismatch shows up as a
+failed import, not as a refused install.
+
 ## What the bundle may and may not claim
 
 It may claim that it read files and reports what the rules found.

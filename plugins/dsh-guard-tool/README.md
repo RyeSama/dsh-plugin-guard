@@ -33,6 +33,10 @@ dsh plugin --profile desktop add link:$PWD/plugins/dsh-guard-tool
 After the profile restarts the agent has `plugin_guard`; nothing appears in the
 desktop UI, because this bundle ships no client code.
 
+Requires DSH `>=0.2.0-rc.1 <0.3.0-0`, declared both in `peerDependencies` and in
+`dsh.engines.dsh`. `@deepseek-ai/dsh-tools` comes from the host; the bundle only
+imports it.
+
 ## What the tool accepts
 
 | argument | type | meaning |

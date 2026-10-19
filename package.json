@@ -65,7 +65,7 @@
     "plugins:test": "node plugins/dsh-guard-tool/scripts/dev-link.mjs && node --test plugins/dsh-guard-tool/test/smoke.mjs"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-tools": "^0.0.1-rc.1",
+    "@deepseek-ai/dsh-tools": "^0.2.1-alpha.2",
     "@types/node": "^22.10.0",
     "commander": "^15.0.0",
     "oxlint": "^1.0.0",
