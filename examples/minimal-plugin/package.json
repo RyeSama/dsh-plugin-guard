@@ -1,0 +1,49 @@
+{
+  "name": "dsh-plugin-example",
+  "version": "0.1.0",
+  "description": "Minimal DSH plugin manifest that passes dsh-plugin-guard with a clean score.",
+  "type": "module",
+  "main": "./index.js",
+  "files": [
+    "index.js",
+    "cordis.patch.yml"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "dsh": {
+    "manifestVersion": 1,
+    "engines": {
+      "dsh": ">=0.1.0"
+    },
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "permissions": {
+      "version": 1,
+      "filesystem": {
+        "read": [],
+        "write": []
+      },
+      "shell": {
+        "execute": false,
+        "allow": []
+      },
+      "env": {
+        "read": [],
+        "bulk": false
+      },
+      "network": {
+        "outbound": [],
+        "inbound": false
+      },
+      "credentials": {
+        "read": [],
+        "write": false
+      },
+      "process": {
+        "spawn": false
+      }
+    }
+  }
+}

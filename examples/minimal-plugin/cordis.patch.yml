@@ -1,0 +1,5 @@
+# Mounts the plugin's host half into the current profile's config tree.
+# The web half is assembled by DSH from `dsh.client` in package.json.
+- insert:
+    - id: dsh-plugin-example
+      name: dsh-plugin-example
