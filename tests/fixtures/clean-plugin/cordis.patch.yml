@@ -1,0 +1,4 @@
+# DSH bundle patch for dsh-fixture-clean
+- insert:
+    - id: dsh-fixture-clean
+      name: dsh-fixture-clean

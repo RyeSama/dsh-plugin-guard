@@ -1,0 +1,3 @@
+- insert:
+    - id: dsh-fixture-undeclared-permissions
+      name: dsh-fixture-undeclared-permissions

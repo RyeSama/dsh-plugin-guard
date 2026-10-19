@@ -1,0 +1,48 @@
+{
+  "name": "dsh-fixture-no-execute",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "postinstall": "node scripts/setup.cjs"
+  },
+  "dsh": {
+    "manifestVersion": 1,
+    "engines": {
+      "dsh": ">=0.1.0"
+    },
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "permissions": {
+      "version": 1,
+      "filesystem": {
+        "read": [],
+        "write": []
+      },
+      "shell": {
+        "execute": false,
+        "allow": []
+      },
+      "env": {
+        "read": [],
+        "bulk": false
+      },
+      "network": {
+        "outbound": [],
+        "inbound": false
+      },
+      "credentials": {
+        "read": [],
+        "write": false
+      },
+      "process": {
+        "spawn": false
+      }
+    }
+  }
+}

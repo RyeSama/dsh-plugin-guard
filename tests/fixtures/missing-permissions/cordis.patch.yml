@@ -1,0 +1,3 @@
+- insert:
+    - id: dsh-fixture-missing-permissions
+      name: dsh-fixture-missing-permissions
