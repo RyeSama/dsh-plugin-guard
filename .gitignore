@@ -1,0 +1,34 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+*.tsbuildinfo
+
+# test output
+coverage/
+.vitest/
+
+# local index database and reports (never commit)
+.dsh-plugin-guard/
+.dsh-guard-index.json
+*.report.json
+reports/
+
+# package tarballs produced by npm pack / smoke tests
+*.tgz
+
+# secrets and local env (never commit)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.log
